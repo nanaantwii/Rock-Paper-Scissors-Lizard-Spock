@@ -4,46 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock, Paper, Scissors, Lizard, Spock</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Rock Paper Scissors Lizard Spock</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <header>
-        <h1>Rock, Paper, Scissors, Lizard, Spock</h1>
+        <h1>Rock Paper Scissors Lizard Spock</h1>
     </header>
     <main>
-        <section id="startPage">
-            <div class="choices" data-choice="rock"><img src="images/rock.png" alt="Rock"></div>
-            <div class="choices" data-choice="paper"><img src="images/paper.png" alt="Paper"></div>
-            <div class="choices" data-choice="scissors"><img src="images/scissors.png" alt="Scissors"></div>
-            <div class="choices" data-choice="lizard"><img src="images/lizard.png" alt="Lizard"></div>
-            <div class="choices" data-choice="spock"><img src="images/spock.png" alt="Spock"></div>
-        </section>
-        <section id="resultPage">
-            <div id="userIcon"></div>
-            <div id="houseIcon"></div>
-            <p id="whoWin"></p>
-            <button id="playAgain">Play Again</button>
-        </section>
-    </main>
-
-    <div id="modal">
-        <div id="modalContent">
-            <button id="closeModal">&times;</button>
-            <p>Instructions: Select your choice from the icons below and see if you can beat the computer!</p>
+        <div id="game">
+            <div id="user">
+                <h2>Your Choice</h2>
+                <div class="choices">
+                    <img src="rock.png" alt="Rock" id="rock">
+                    <img src="paper.png" alt="Paper" id="paper">
+                    <img src="scissors.png" alt="Scissors" id="scissors">
+                    <img src="lizard.png" alt="Lizard" id="lizard">
+                    <img src="spock.png" alt="Spock" id="spock">
+                </div>
+            </div>
+            <div id="computer">
+                <h2>Computer's Choice</h2>
+                <div id="computer-choice"></div>
+            </div>
         </div>
-    </div>
-
-    <button id="openModal">Instructions</button>
-    <button id="switch">Toggle Sound</button>
-
-    <audio src="sounds/bg-sound.mp3" data-sound="bg-sound" loop></audio>
-    <audio src="sounds/user-choice.mp3" data-sound="user-choice"></audio>
-    <audio src="sounds/you-win.mp3" data-sound="you-win"></audio>
-    <audio src="sounds/you-lose.mp3" data-sound="you-lose"></audio>
-    <audio src="sounds/draw.mp3" data-sound="draw"></audio>
-
+        <div id="result"></div>
+        <button id="reset">Play Again</button>
+    </main>
     <script src="script.js"></script>
 </body>
 
