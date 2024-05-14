@@ -1,122 +1,77 @@
-// Define global variables
-let userScore = 0;
-let computerScore = 0;
+// Get elements
+const icons = document.querySelectorAll('.icon');
+const userChoiceDisplay = document.getElementById('userChoice');
+const computerChoiceDisplay = document.getElementById('computerChoice');
+const resultDisplay = document.getElementById('result');
+const scoreDisplay = document.getElementById('score');
+const playAgainBtn = document.getElementById('playAgain');
 
-// Function to start the game
-function startGame() {
-    // Add event listeners to all icons
-    const icons = document.querySelectorAll('.icon');
-    icons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            const userChoice = icon.dataset.choice;
-            const computerChoice = getComputerChoice();
-            const result = determineWinner(userChoice, computerChoice);
-            displayResult(userChoice, computerChoice, result);
-            playSound(result);
-        });
-    });
+// Initialize score
+let score = 0;
+
+// Choices object
+const choices = {
+  rock: { beats: ['scissors', 'lizard'], icon: 'rock' },
+  paper: { beats: ['rock', 'spock'], icon: 'paper' },
+  scissors: { beats: ['paper', 'lizard'], icon: 'scissors' },
+  lizard: { beats: ['paper', 'spock'], icon: 'lizard' },
+  spock: { beats: ['rock', 'scissors'], icon: 'spock' },
+};
+
+// Computer's choice
+function computerChoice() {
+  const keys = Object.keys(choices);
+  const randomIndex = Math.floor(Math.random() * keys.length);
+  return choices[keys[randomIndex]];
 }
 
-// Function to get computer's choice
-function getComputerChoice() {
-    const choices = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
-    const randomIndex = Math.floor(Math.random() * choices.length);
-    return choices[randomIndex];
+// Update score
+function updateScore(result) {
+  if (result === 'win') score++;
+  if (result === 'lose') score--;
+  scoreDisplay.textContent = score;
 }
 
-// Function to determine the winner
-function determineWinner(userChoice, computerChoice) {
-    if (userChoice === computerChoice) {
-        return 'draw';
-    } else if (
-        (userChoice === 'rock' && (computerChoice === 'scissors' || computerChoice === 'lizard')) ||
-        (userChoice === 'paper' && (computerChoice === 'rock' || computerChoice === 'spock')) ||
-        (userChoice === 'scissors' && (computerChoice === 'paper' || computerChoice === 'lizard')) ||
-        (userChoice === 'lizard' && (computerChoice === 'paper' || computerChoice === 'spock')) ||
-        (userChoice === 'spock' && (computerChoice === 'rock' || computerChoice === 'scissors'))
-    ) {
-        return 'win';
-    } else {
-        return 'lose';
-    }
+// Display choices
+function displayChoices(user, computer) {
+  userChoiceDisplay.className = `icon ${user}`;
+  userChoiceDisplay.style.backgroundImage = `url('images/${user}.png')`;
+  computerChoiceDisplay.className = `icon ${computer}`;
+  computerChoiceDisplay.style.backgroundImage = `url('images/${computer}.png')`;
 }
 
-// Function to display the result
-function displayResult(userChoice, computerChoice, result) {
-    // Get the icons
-    const userIcon = document.getElementById('userIcon');
-    const houseIcon = document.getElementById('houseIcon');
-
-    // Set the icons based on choices
-    userIcon.className = `icon ${userChoice}`;
-    houseIcon.className = `icon ${computerChoice}`;
-
-    // Get the result message element
-    const whoWin = document.getElementById('whoWin');
-
-    // Display result message
-    if (result === 'draw') {
-        whoWin.innerText = "It's a draw!";
-    } else if (result === 'win') {
-        whoWin.innerText = 'You win!';
-        userScore++;
-    } else {
-        whoWin.innerText = 'You lose!';
-        computerScore++;
-    }
-
-    // Update score
-    document.getElementById('score').innerText = userScore;
-
-    // Show result page
-    document.getElementById('startPage').style.display = 'none';
-    document.getElementById('resultPage').style.display = 'block';
+// Determine winner
+function determineWinner(user, computer) {
+  if (user === computer) return 'draw';
+  if (choices[user].beats.includes(computer)) return 'win';
+  return 'lose';
 }
 
-// Function to reset the game
-function resetGame() {
-    // Reset scores
-    userScore = 0;
-    computerScore = 0;
-
-    // Reset score display
-    document.getElementById('score').innerText = '0';
-
-    // Reset result page
-    document.getElementById('startPage').style.display = 'block';
-    document.getElementById('resultPage').style.display = 'none';
+// Show result
+function showResult(result) {
+  if (result === 'draw') resultDisplay.textContent = "It's a draw!";
+  if (result === 'win') resultDisplay.textContent = 'You win!';
+  if (result === 'lose') resultDisplay.textContent = 'You lose!';
 }
 
-// Function to handle play again button click
-document.getElementById('playAgain').addEventListener('click', resetGame);
-
-// Function to handle rules modal
-function handleRulesModal() {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'block';
+// Play again
+function playAgain() {
+  userChoiceDisplay.style.backgroundImage = '';
+  computerChoiceDisplay.style.backgroundImage = '';
+  resultDisplay.textContent = '';
 }
 
-// Function to handle close modal button click
-document.getElementById('closeModal').addEventListener('click', function () {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'none';
+// Event listeners
+icons.forEach(icon => {
+  icon.addEventListener('click', () => {
+    const userChoice = icon.getAttribute('data-choice');
+    const computerChoiceObj = computerChoice();
+    const computerChoice = computerChoiceObj.icon;
+    const result = determineWinner(userChoice, computerChoice);
+    displayChoices(userChoice, computerChoice);
+    showResult(result);
+    updateScore(result);
+  });
 });
 
-// Function to play sound based on result
-function playSound(result) {
-    let sound;
-    if (result === 'win') {
-        sound = document.querySelector('audio[data-sound="you-win"]');
-    } else if (result === 'lose') {
-        sound = document.querySelector('audio[data-sound="you-lose"]');
-    } else {
-        sound = document.querySelector('audio[data-sound="draw"]');
-    }
-    sound.play();
-}
-
-// Event listener for rules modal
-document.getElementById('openModal').addEventListener('click', handleRulesModal);
-
-// Call the startGame function to initiate the game
-startGame();
+playAgainBtn.addEventListener('click', playAgain);
