@@ -32,7 +32,7 @@ function displayResult(result) {
 // Function to update the computer's choice in the UI
 function updateComputerChoice(computer) {
     const computerChoiceDiv = document.getElementById("computer-choice");
-    computerChoiceDiv.innerHTML = computer;
+    computerChoiceDiv.innerHTML = `<p>Computer chose: <strong>${computer}</strong></p>`;
 }
 
 // Function to reset the game
@@ -48,14 +48,11 @@ document.querySelectorAll(".choices img").forEach(choice => {
     choice.addEventListener("click", () => {
         userChoice = choice.alt.toLowerCase();
         computerChoice = generateComputerChoice();
-        displayResult(determineWinner(userChoice, computerChoice));
+        const result = determineWinner(userChoice, computerChoice);
+        displayResult(result);
         updateComputerChoice(computerChoice);
     });
 });
 
 // Event listener for resetting the game
-document.getElementById("rock").addEventListener("click", resetGame);
-document.getElementById("paper").addEventListener("click", resetGame);
-document.getElementById("scissors").addEventListener("click", resetGame);
-document.getElementById("lizard").addEventListener("click", resetGame);
-document.getElementById("spock").addEventListener("click", resetGame);
+document.getElementById("reset").addEventListener("click", resetGame);
